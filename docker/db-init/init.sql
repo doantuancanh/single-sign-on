@@ -1,0 +1,1 @@
+CREATE DATABASE teky_sso;

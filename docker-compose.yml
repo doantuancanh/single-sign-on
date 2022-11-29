@@ -1,0 +1,97 @@
+version: '3'
+
+services:
+  base: &base
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        BUNDLE_WITHOUT: ''
+        RAILS_ENV: 'development'
+    image: teky_sso
+    env_file: .env
+
+  teky_sso:
+    <<: *base
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["chmod", "+x", rm", "-rf", "/app/tmp/pids/server.pid /app/tmp/cache/*"]
+    image: teky_sso
+    volumes:
+      - .:/app:delegated
+      - cache:/app/tmp/cache
+      - bundle:/usr/local/bundle
+    depends_on:
+      - postgres
+      - redis
+        # - sidekiq
+    ports:
+      - 3000:3000
+    env_file: .env
+    environment:
+      - RAILS_ENV=development
+    command: ["bundle", "exec", "rails", "s", "-p", "3000", "-b", "0.0.0.0"]
+
+      # sidekiq:
+      #   <<: *base
+      #   image: teky_sso
+      #   volumes:
+      #     - .:/app:delegated
+      #     - cache:/app/tmp/cache
+      #     - bundle:/usr/local/bundle
+      #   depends_on:
+      #     - postgres
+      #     - redis
+      #   environment:
+      #     - RAILS_ENV=development
+      #   command: ["bundle", "exec", "sidekiq", "-C", "config/sidekiq.yml"]
+
+  postgres:
+    image: postgres:12
+    restart: always
+    ports:
+      - '54320:5432'
+    volumes:
+      - ./postgres:/var/lib/postgresql/data/pgdata
+      - ./docker/db-init:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_HOST: ${DATABASE_HOST}    
+      POSTGRES_PORT: ${DATABASE_PORT}    
+      DATABASE_NAME: ${DATABASE_NAME}    
+      POSTGRES_USER: ${DATABASE_USER}    
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      PGDATA: /var/lib/postgresql/data/pgdata
+
+  sso_migration:
+    <<: *base
+      #build:
+      #  context: .
+    image: teky_sso
+    command: ["bundle", "exec", "rake db:migrate"]
+      #restart: none
+    environment:
+      RAILS_ENV: ${RAILS_ENV}
+      POSTGRES_HOST: ${DATABASE_HOST}    
+      POSTGRES_PORT: ${DATABASE_PORT}    
+      DATABASE_NAME: ${DATABASE_NAME}    
+      POSTGRES_USER: ${DATABASE_USER}    
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    depends_on:
+      - postgres
+
+  redis:
+    image: redis:alpine
+    restart: always
+    volumes:
+      - redis:/var/lib/redis
+    ports:
+      - '63790:6379'
+
+volumes:
+  postgres:
+  redis:
+  packs:
+  node_modules:
+  cache:
+  bundle:
