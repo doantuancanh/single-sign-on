@@ -1,0 +1,65 @@
+services:
+  base: &base
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    image: sso
+    env_file: .env
+  postgres:
+    image: postgres:15
+    ports:
+      - '54321:5432'
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data/pgdata
+      - ./docker/db-init:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_HOST: ${DATABASE_HOST}
+      POSTGRES_PORT: ${DATABASE_PORT}
+      DATABASE_NAME: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      PGDATA: /var/lib/postgresql/data/pgdata
+  redis:
+    image: redis:7
+    restart: always
+    volumes:
+      - ./redis_data:/var/lib/redis
+    ports:
+      - '63791:6379'
+  migrate:
+    <<: *base
+    image: sso
+    command: ["bundle", "exec", "rails db:migrate"]
+    volumes:
+      - .:/app
+    environment:
+      RAILS_ENV: ${RAILS_ENV}
+      POSTGRES_HOST: ${DATABASE_HOST}
+      POSTGRES_PORT: ${DATABASE_PORT}
+      DATABASE_NAME: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    depends_on:
+      - postgres
+  web:
+    <<: *base
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+      - redis
+      - migrate
+    env_file: .env
+    restart: always
+  sidekiq:
+    <<: *base
+    image: sso
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres
+      - redis
+    command: ["bundle", "exec", "sidekiq", "-C", "config/sidekiq.yml"]

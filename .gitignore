@@ -7,6 +7,9 @@
 # Ignore bundler config.
 /.bundle
 
+# VS Code files
+.idea/
+
 # Ignore the default SQLite database.
 /db/*.sqlite3
 /db/*.sqlite3-*
@@ -37,3 +40,7 @@
 .gitignore
 .env
 postgres
+
+# Ignore database folder
+postgres_data/
+redis_data/

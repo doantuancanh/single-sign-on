@@ -1,1 +1,1 @@
-CREATE DATABASE teky_sso;
+CREATE DATABASE sso;
