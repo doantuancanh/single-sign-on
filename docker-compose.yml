@@ -8,16 +8,16 @@ services:
       args:
         BUNDLE_WITHOUT: ''
         RAILS_ENV: 'development'
-    image: teky_sso
+    image: sso
     env_file: .env
 
-  teky_sso:
+  sso:
     <<: *base
     build:
       context: .
       dockerfile: Dockerfile
     command: ["chmod", "+x", rm", "-rf", "/app/tmp/pids/server.pid /app/tmp/cache/*"]
-    image: teky_sso
+    image: sso
     volumes:
       - .:/app:delegated
       - cache:/app/tmp/cache
@@ -56,10 +56,10 @@ services:
       - ./postgres:/var/lib/postgresql/data/pgdata
       - ./docker/db-init:/docker-entrypoint-initdb.d
     environment:
-      POSTGRES_HOST: ${DATABASE_HOST}    
-      POSTGRES_PORT: ${DATABASE_PORT}    
-      DATABASE_NAME: ${DATABASE_NAME}    
-      POSTGRES_USER: ${DATABASE_USER}    
+      POSTGRES_HOST: ${DATABASE_HOST}
+      POSTGRES_PORT: ${DATABASE_PORT}
+      DATABASE_NAME: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
       PGDATA: /var/lib/postgresql/data/pgdata
 
@@ -67,7 +67,7 @@ services:
     <<: *base
       #build:
       #  context: .
-    image: teky_sso
+    image: sso
     command: ["bundle", "exec", "rake db:migrate"]
       #restart: none
     environment:
