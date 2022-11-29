@@ -40,3 +40,7 @@
 .gitignore
 .env
 postgres
+
+# Ignore database folder
+postgres_data/
+redis_data/
