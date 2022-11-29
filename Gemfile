@@ -84,6 +84,7 @@ gem 'paranoia', '~> 2.6', '>= 2.6.1'
 
 # Role
 gem 'rolify', '~> 6.0'
+gem 'dotenv-rails'
 
 # Highlight code
 # gem 'coderay', '~> 1.1', '>= 1.1.3'
