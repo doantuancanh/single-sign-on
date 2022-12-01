@@ -5,23 +5,13 @@ class Api::V1::Users::RegistrationsController < Devise::RegistrationsController
   before_action :configure_sign_up_params, only: [:create]
   # before_action :configure_account_update_params, only: [:update]
 
-  respond_to :json
-
-  def create
-    super    #user = User.new user_params
-    #if user.save
-    #  render json: {message: "Registration has been completed",user: user}, status: 200
-    #else
-    #  warden.custom_failure!
-    #  render json: {message: error_messages(user.errors.messages), status: 200
-    #end
-  end
-
-  private
   # GET /resource/sign_up
   # def new
   #   super
   # end
+  def create
+    super
+  end
 
   # POST /resource
   # def create
@@ -52,11 +42,15 @@ class Api::V1::Users::RegistrationsController < Devise::RegistrationsController
   #   super
   # end
 
-  # protected
+  protected
 
-  # If you have extra params to permit, append them to the sanitizer.
   def configure_sign_up_params
     devise_parameter_sanitizer.permit(:sign_up, keys: [:username])
+  end
+
+  def sign_up_params
+    params[:user] = params
+    params.require(:user).permit(:email, :username, :password, :password_confirmation)
   end
 
   # If you have extra params to permit, append them to the sanitizer.
@@ -73,4 +67,36 @@ class Api::V1::Users::RegistrationsController < Devise::RegistrationsController
   # def after_inactive_sign_up_path_for(resource)
   #   super(resource)
   # end
+  #
+  private
+
+  def respond_with(resource, _opts = {})
+    register_success && return if resource.persisted?
+
+    register_failed
+  end
+
+  def register_success
+    resource.create_access_token(params[:client_id])
+    access_token = resource.access_tokens.last
+
+    payload = {
+      user_id: resource.id,
+      username: resource.username,
+      email: resource.email,
+      created_at: resource.created_at.strftime('%H:%M:%S %d/%m/%Y'),
+      access_token: access_token.token,
+      token_type: 'Bearer',
+      expires_in: access_token.expires_in,
+      refresh_token: access_token.refresh_token,
+    }
+
+    response = Response::JsonResponse.new(Response::Message.new(200, "Signed up sucessfully!"), payload)
+    render json: response.build, status: 200
+  end
+
+  def register_failed
+    response = Response::JsonResponse.new(Response::Message.new(400, resource.errors.full_messages), {})
+    render json: response.build, status: 400
+  end
 end
