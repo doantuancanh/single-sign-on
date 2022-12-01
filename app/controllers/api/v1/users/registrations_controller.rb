@@ -3,6 +3,7 @@
 class Api::V1::Users::RegistrationsController < Devise::RegistrationsController
   protect_from_forgery except: :create
   before_action :configure_sign_up_params, only: [:create]
+  before_action :validate_client_application, only: %i[create]
   # before_action :configure_account_update_params, only: [:update]
 
   # GET /resource/sign_up
@@ -85,10 +86,10 @@ class Api::V1::Users::RegistrationsController < Devise::RegistrationsController
       username: resource.username,
       email: resource.email,
       created_at: resource.created_at.strftime('%H:%M:%S %d/%m/%Y'),
-      access_token: access_token.token,
+      access_token: access_token&.token,
       token_type: 'Bearer',
-      expires_in: access_token.expires_in,
-      refresh_token: access_token.refresh_token,
+      expires_in: access_token&.expires_in,
+      refresh_token: access_token&.refresh_token,
     }
 
     response = Response::JsonResponse.new(Response::Message.new(200, "Signed up sucessfully!"), payload)
@@ -98,5 +99,14 @@ class Api::V1::Users::RegistrationsController < Devise::RegistrationsController
   def register_failed
     response = Response::JsonResponse.new(Response::Message.new(400, resource.errors.full_messages), {})
     render json: response.build, status: 400
+  end
+
+  def validate_client_application
+    client = Doorkeeper::Application.where(uid: params[:client_id]).first()
+
+    if client.blank?
+      response = Response::JsonResponse.new(Response::Message.new(400, "Invalid Application!"), {})
+      render json: response.build, status: 400
+    end
   end
 end
