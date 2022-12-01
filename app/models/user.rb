@@ -1,7 +1,7 @@
 class User < ApplicationRecord
+  include AccessTokenable
+
   rolify
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
@@ -9,7 +9,7 @@ class User < ApplicationRecord
             uniqueness: { case_sensitive: false },
             presence: true,
             allow_blank: false,
-            format: { with: /\A[a-zA-Z0-9_]+\z/ }
+            format: { with: /\A[a-zA-Z0-9_@.]+\z/ }
 
   has_many :access_grants,
            class_name: 'Doorkeeper::AccessGrant',
@@ -21,6 +21,7 @@ class User < ApplicationRecord
            foreign_key: :resource_owner_id,
            dependent: :delete_all
 
+  before_validation :set_username, on: :create
 
   attr_writer :login
 
@@ -38,6 +39,12 @@ class User < ApplicationRecord
       else
         where(username: conditions[:username]).first
       end
+    end
+  end
+
+  def set_username
+    if username.blank?
+      self.username = email
     end
   end
 
