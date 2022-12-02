@@ -4,12 +4,10 @@ class Api::V1::Users::RegistrationsController < Devise::RegistrationsController
   protect_from_forgery except: :create
   before_action :configure_sign_up_params, only: [:create]
   before_action :validate_client_application, only: %i[create]
-  # before_action :configure_account_update_params, only: [:update]
 
-  # GET /resource/sign_up
-  # def new
-  #   super
-  # end
+  include RespondAction
+
+
   def create
     super
   end
@@ -71,35 +69,35 @@ class Api::V1::Users::RegistrationsController < Devise::RegistrationsController
   #
   private
 
-  def respond_with(resource, _opts = {})
-    register_success && return if resource.persisted?
+  # def respond_with(resource, _opts = {})
+  #   register_success && return if resource.persisted?
 
-    register_failed
-  end
+  #   register_failed
+  # end
 
-  def register_success
-    resource.create_access_token(params[:client_id])
-    access_token = resource.access_tokens.last
+  # def register_success
+  #   resource.create_access_token(params[:client_id])
+  #   access_token = resource.access_tokens.last
 
-    payload = {
-      user_id: resource.id,
-      username: resource.username,
-      email: resource.email,
-      created_at: resource.created_at.strftime('%H:%M:%S %d/%m/%Y'),
-      access_token: access_token&.token,
-      token_type: 'Bearer',
-      expires_in: access_token&.expires_in,
-      refresh_token: access_token&.refresh_token,
-    }
+  #   payload = {
+  #     user_id: resource.id,
+  #     username: resource.username,
+  #     email: resource.email,
+  #     created_at: resource.created_at.strftime('%H:%M:%S %d/%m/%Y'),
+  #     access_token: access_token&.token,
+  #     token_type: 'Bearer',
+  #     expires_in: access_token&.expires_in,
+  #     refresh_token: access_token&.refresh_token,
+  #   }
 
-    response = Response::JsonResponse.new(Response::Message.new(200, "Signed up sucessfully!"), payload)
-    render json: response.build, status: 200
-  end
+  #   response = Response::JsonResponse.new(Response::Message.new(200, "Signed up sucessfully!"), payload)
+  #   render json: response.build, status: 200
+  # end
 
-  def register_failed
-    response = Response::JsonResponse.new(Response::Message.new(400, resource.errors.full_messages), {})
-    render json: response.build, status: 400
-  end
+  # def register_failed
+  #   response = Response::JsonResponse.new(Response::Message.new(400, resource.errors.full_messages), {})
+  #   render json: response.build, status: 400
+  # end
 
   def validate_client_application
     client = Doorkeeper::Application.where(uid: params[:client_id]).first()
