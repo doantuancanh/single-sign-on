@@ -18,8 +18,20 @@ module AccessTokenable
   end
 
   def oauth_client?(client_id)
-    @client = Doorkeeper::Application.where(uid: client_id).first()
+    if @client.blank?
+      @client = Doorkeeper::Application.where(uid: client_id).first()
+    end
+
+    @client
   end
+
+  def revoke_all_token(client_id)
+    return unless oauth_client?(client_id)
+
+    Doorkeeper::AccessToken.revoke_all_for(@client.id, self)
+  end
+
+  private
 
   def generate_refresh_token
      loop do
