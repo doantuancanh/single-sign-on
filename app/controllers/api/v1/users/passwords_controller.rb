@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-class Users::PasswordsController < Devise::PasswordsController
+class Api::V1::Users::PasswordsController < Devise::PasswordsController
+  protect_from_forgery except: :create
+
   # GET /resource/password/new
   # def new
   #   super
@@ -34,6 +36,6 @@ class Users::PasswordsController < Devise::PasswordsController
 
   private
   
-  def respond_with
-  end
+  #def respond_with(response)
+  #end
 end

@@ -6,8 +6,14 @@ default: &default
 development:
   <<: *default
   url: <%= ENV['DATABASE_URL'] %>
-  username: <%= ENV['DATABASE_USER'] %>
-  password: <%= ENV['POSTGRES_PASSWORD'] %>
-  host: <%= ENV['POSTGRES_HOST'] %>
-  port: <%= ENV['POSTGRES_PORT'] %>
-  database: <%= ENV['DATABASE_NAME'] %>
+  username: postgres
+  password: canhha_94@
+  host: localhost
+  port: 5432
+  database: rails_oauth2
+    #
+    #  username: <%= ENV['DATABASE_USER'] %>
+    #  password: <%= ENV['POSTGRES_PASSWORD'] %>
+    #  host: <%= ENV['POSTGRES_HOST'] %>
+    #  port: <%= ENV['POSTGRES_PORT'] %>
+    #  database: <%= ENV['DATABASE_NAME'] %>
