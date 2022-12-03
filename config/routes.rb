@@ -9,10 +9,14 @@ Rails.application.routes.draw do
           sessions: 'api/v1/users/sessions',
           passwords: 'api/v1/users/passwords'
         },
-        defaults: { format: :json }
+      defaults: { format: :json }
+
+      resource :children, only: %i[list create edit destroy]
     end
   end
+
   scope 'v1' do
     use_doorkeeper
   end
+
 end

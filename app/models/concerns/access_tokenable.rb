@@ -25,6 +25,10 @@ module AccessTokenable
     @client
   end
 
+  def client
+    Doorkeeper::AccessToken.where(resource_owner_id: self.id).last&.application
+  end
+
   def revoke_all_token(client_id)
     return unless oauth_client?(client_id)
 

@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   include AccessTokenable
+  include HasChildrenable
 
   rolify
   devise :database_authenticatable, :registerable,
@@ -20,6 +21,9 @@ class User < ApplicationRecord
            class_name: 'Doorkeeper::AccessToken',
            foreign_key: :resource_owner_id,
            dependent: :delete_all
+
+  has_many :passcodes, class_name: "UserPasscode", dependent: :destroy
+  has_one :profile, class_name: "UserProfile", dependent: :destroy
 
   before_validation :set_username, on: :create
 
@@ -48,4 +52,7 @@ class User < ApplicationRecord
     end
   end
 
+  def will_save_change_to_email?
+    false
+  end
 end

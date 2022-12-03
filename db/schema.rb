@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_30_083308) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_02_093943) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -70,25 +70,25 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_30_083308) do
     t.string "code", null: false
     t.string "type", null: false
     t.datetime "expired_date"
-    t.bigint "users_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id"
     t.index ["code"], name: "index_user_passcodes_on_code", unique: true
-    t.index ["users_id"], name: "index_user_passcodes_on_users_id"
+    t.index ["user_id"], name: "index_user_passcodes_on_user_id"
   end
 
   create_table "user_profiles", force: :cascade do |t|
     t.string "school"
     t.string "fullname"
     t.string "gender"
-    t.bigint "users_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["users_id"], name: "index_user_profiles_on_users_id"
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_user_profiles_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "email", default: "", null: false
+    t.string "email", default: ""
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
@@ -96,8 +96,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_30_083308) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "username"
-    t.index ["email"], name: "index_users_on_email", unique: true
+    t.integer "depth", default: 0
+    t.bigint "parent_id"
+    t.index ["parent_id"], name: "index_users_on_parent_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["username", "email"], name: "index_users_on_username_and_email", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
