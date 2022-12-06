@@ -13,7 +13,11 @@ Doorkeeper.configure do
     request.env["devise.allow_params_authentication"] = true
     # Set `store: false` to stop Warden from storing user in session
     # https://github.com/doorkeeper-gem/doorkeeper/issues/475#issuecomment-305517549
-    request.env["warden"].authenticate!(scope: :user, store: false)
+    if request.params[:passcode].present?
+      request.env["warden"].authenticate!(:passcode)
+    else
+      request.env["warden"].authenticate!(scope: :user, store: false)
+    end
   end
   # resource_owner_authenticator do
   #   current_user || warden.authenticate!(scope: :user)

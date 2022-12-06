@@ -27,6 +27,8 @@ class User < ApplicationRecord
 
   before_validation :set_username, on: :create
 
+  scope :passcode, ->(passcode) { joins(:passcodes).where(passcodes: {code: passcode}).first }
+
   attr_writer :login
 
   def login
