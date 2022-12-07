@@ -23,6 +23,8 @@ class User < ApplicationRecord
            dependent: :delete_all
 
   has_many :passcodes, class_name: "UserPasscode", dependent: :destroy
+  has_encrypted :email, migrating: true
+  blind_index :email, migrating: true
   has_one :profile, class_name: "UserProfile", dependent: :destroy
 
   before_validation :set_username, on: :create

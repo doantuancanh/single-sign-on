@@ -25,27 +25,24 @@ services:
     depends_on:
       - postgres
       - redis
-        # - sidekiq
+        #  - sidekiq
     ports:
       - 3000:3000
     env_file: .env
     environment:
       - RAILS_ENV=development
+    entrypoint: docker/entrypoints/web.sh
     command: ["bundle", "exec", "rails", "s", "-p", "3000", "-b", "0.0.0.0"]
 
-      # sidekiq:
-      #   <<: *base
-      #   image: teky_sso
-      #   volumes:
-      #     - .:/app:delegated
-      #     - cache:/app/tmp/cache
-      #     - bundle:/usr/local/bundle
-      #   depends_on:
-      #     - postgres
-      #     - redis
-      #   environment:
-      #     - RAILS_ENV=development
-      #   command: ["bundle", "exec", "sidekiq", "-C", "config/sidekiq.yml"]
+      #sidekiq:
+      #  <<: *base
+      #  image: sso
+      #  volumes:
+      #    - .:/app
+      #  depends_on:
+      #    - postgres
+      #    - redis
+      #  command: ["bundle", "exec", "sidekiq", "-C", "config/sidekiq.yml"]
 
   postgres:
     image: postgres:12

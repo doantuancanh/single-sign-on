@@ -1,4 +1,4 @@
-module HasChildrenable
+module StudentAction
   extend ActiveSupport::Concern
 
   def add_child(params)

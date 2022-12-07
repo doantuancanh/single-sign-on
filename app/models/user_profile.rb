@@ -3,4 +3,7 @@ class UserProfile < ActiveRecord::Base
 
   belongs_to :user
 
+  # Encrypt data
+  has_encrypted :phone, migrating: true
+  blind_index :phone, migrating: true
 end

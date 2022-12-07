@@ -86,10 +86,15 @@ gem 'paranoia', '~> 2.6', '>= 2.6.1'
 
 # Role
 gem 'rolify', '~> 6.0'
+
+# .env
 gem 'dotenv-rails'
 
 gem 'simple_command', '~> 0.0.9'
 
+gem 'lockbox', '~> 1.1'
+gem 'blind_index', '~> 2.3', '>= 2.3.1'
+gem 'phonelib', '~> 0.7.5'
+
 # Highlight code
 # gem 'coderay', '~> 1.1', '>= 1.1.3'
-#gem 'oauth2', '~> 2.0', '>= 2.0.9'
