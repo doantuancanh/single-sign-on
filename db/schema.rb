@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_02_093943) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_07_025308) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -67,13 +67,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_02_093943) do
   end
 
   create_table "user_passcodes", force: :cascade do |t|
-    t.string "code", null: false
     t.string "type", null: false
     t.datetime "expired_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"
-    t.index ["code"], name: "index_user_passcodes_on_code", unique: true
+    t.text "phone_ciphertext"
+    t.string "code_bidx"
+    t.text "code_ciphertext"
+    t.index ["code_bidx"], name: "index_user_passcodes_on_code_bidx"
     t.index ["user_id"], name: "index_user_passcodes_on_user_id"
   end
 
@@ -84,24 +86,30 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_02_093943) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"
+    t.text "phone_ciphertext"
+    t.string "country_code"
+    t.string "birth_year"
+    t.text "address"
+    t.bigint "parent_id"
+    t.string "phone_bidx"
+    t.index ["parent_id"], name: "index_user_profiles_on_parent_id"
+    t.index ["phone_bidx"], name: "index_user_profiles_on_phone_bidx"
     t.index ["user_id"], name: "index_user_profiles_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "email", default: ""
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "username"
-    t.integer "depth", default: 0
-    t.bigint "parent_id"
-    t.index ["parent_id"], name: "index_users_on_parent_id"
+    t.string "code"
+    t.text "email_ciphertext"
+    t.string "email_bidx"
+    t.index ["code"], name: "index_users_on_code", unique: true
+    t.index ["email_bidx"], name: "index_users_on_email_bidx"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-    t.index ["username", "email"], name: "index_users_on_username_and_email", unique: true
-    t.index ["username"], name: "index_users_on_username", unique: true
   end
 
   create_table "users_roles", id: false, force: :cascade do |t|
@@ -116,4 +124,5 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_02_093943) do
   add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
+  add_foreign_key "user_profiles", "users", column: "parent_id"
 end
