@@ -1,9 +1,5 @@
-module AccessTokenable    
-  extend ActiveSupport::Concern    
-
-  # included do
-  #   after_create -> { create_access_token(client_id) }
-  # end
+module AuthenticationAction
+  extend ActiveSupport::Concern
 
   def create_access_token(client_id)
     return unless oauth_client?(client_id)
@@ -13,7 +9,7 @@ module AccessTokenable
       resource_owner_id: self.id,
       refresh_token: generate_refresh_token,
       expires_in: Doorkeeper.configuration.access_token_expires_in.to_i,
-      scopes: 'read'
+      scopes: ''
     )
   end
 

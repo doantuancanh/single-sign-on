@@ -5,6 +5,10 @@ class UserPasscode < ActiveRecord::Base
 
   enum type: { default: 'default', short: 'short' }
 
+  # Encrypt data
+  has_encrypted :code, migrating: true
+  blind_index :code, migrating: true
+
   before_validation :prepare_params
 
   private
