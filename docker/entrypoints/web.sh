@@ -15,4 +15,4 @@ done
 
 bundle install
 
-exec "$@
+exec "$@"

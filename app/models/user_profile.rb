@@ -4,6 +4,7 @@ class UserProfile < ActiveRecord::Base
   belongs_to :user
 
   # Encrypt data
-  has_encrypted :phone, migrating: true
-  blind_index :phone, migrating: true
+  has_encrypted :phone
+  blind_index :phone
+  self.ignored_columns = ["phone"]
 end

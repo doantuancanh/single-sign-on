@@ -8,7 +8,7 @@ Doorkeeper.configure do
 
   # This block will be called to check whether the resource owner is authenticated or not.
   resource_owner_from_credentials do |routes|
-    request.params[:user] = {username: request.params[:username], password: request.params[:password]}
+    request.params[:user] = {email: request.params[:username], password: request.params[:password]}
     request.env["warden"].logout(:user)
     request.env["devise.allow_params_authentication"] = true
     # Set `store: false` to stop Warden from storing user in session
