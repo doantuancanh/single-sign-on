@@ -6,8 +6,9 @@ class UserPasscode < ActiveRecord::Base
   enum type: { default: 'default', short: 'short' }
 
   # Encrypt data
-  has_encrypted :code, migrating: true
-  blind_index :code, migrating: true
+  has_encrypted :code
+  blind_index :code
+  self.ignored_columns = ["code"]
 
   before_validation :prepare_params
 

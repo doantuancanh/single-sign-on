@@ -3,9 +3,10 @@ module CustomTokenResponse
     user = User.find(token.resource_owner_id)
 
     additional_data = {
-      'username' => user.username,
-      'user_id' => user.id,
-      'expired_time' => (token.created_at + token.expires_in.seconds).to_i
+      email: user.email,
+      user_id: user.id,
+      user_code: user.code,
+      expired_time: (token.created_at + token.expires_in.seconds).to_i
     }
 
     super.merge(additional_data)
