@@ -1,6 +1,18 @@
 module AuthenticationAction
   extend ActiveSupport::Concern
 
+  included do
+    has_many  :access_grants,
+      class_name: 'Doorkeeper::AccessGrant',
+      foreign_key: :resource_owner_id,
+      dependent: :delete_all 
+
+    has_many  :access_tokens,
+      class_name: 'Doorkeeper::AccessToken',
+      foreign_key: :resource_owner_id,
+      dependent: :delete_all
+  end
+
   def create_access_token(client_id)
     return unless oauth_client?(client_id)
 
@@ -34,10 +46,10 @@ module AuthenticationAction
   private
 
   def generate_refresh_token
-     loop do
-        token = SecureRandom.hex(32)
-        break token unless Doorkeeper::AccessToken.exists?(refresh_token: token)
-     end
+    loop do
+      token = SecureRandom.hex(32)
+      break token unless Doorkeeper::AccessToken.exists?(refresh_token: token)
+    end
   end
-  
+
 end

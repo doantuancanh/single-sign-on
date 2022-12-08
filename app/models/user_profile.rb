@@ -6,5 +6,9 @@ class UserProfile < ActiveRecord::Base
   # Encrypt data
   has_encrypted :phone
   blind_index :phone
+
   self.ignored_columns = ["phone"]
+
+  # validate :validate_phone, on: :create
+
 end

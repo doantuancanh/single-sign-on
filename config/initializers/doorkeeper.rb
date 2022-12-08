@@ -19,12 +19,10 @@ Doorkeeper.configure do
       request.env["warden"].authenticate!(scope: :user, store: false)
     end
   end
-  # resource_owner_authenticator do
-  #   current_user || warden.authenticate!(scope: :user)
-  #   # Put your resource owner authentication logic here.
-  #   # Example implementation:
-  #   #   User.find_by(id: session[:user_id]) || redirect_to(new_user_session_url)
-  # end
+
+  resource_owner_authenticator do
+    current_user || warden.authenticate!(scope: :user)
+  end
 
   admin_authenticator do |_routes|
     current_user || warden.authenticate!(scope: :user)
@@ -110,7 +108,7 @@ Doorkeeper.configure do
   # Access token expiration time (default: 2 hours).
   # If you want to disable expiration, set this to `nil`.
   #
-  # access_token_expires_in 2.hours
+  access_token_expires_in 30.days
 
   # Assign custom TTL for access tokens. Will be used instead of access_token_expires_in
   # option if defined. In case the block returns `nil` value Doorkeeper fallbacks to

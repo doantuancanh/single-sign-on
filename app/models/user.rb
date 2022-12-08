@@ -1,39 +1,30 @@
 class User < ApplicationRecord
   include AuthenticationAction
+  include HasProfile
   include StudentAction
 
   rolify
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+         :recoverable, :rememberable
+  devise :doorkeeper
 
-  validates :username,
-            uniqueness: { case_sensitive: false },
+  validate  :email,
             presence: true,
+            uniqueness: { case_sensitive: false },
             allow_blank: false,
-            format: { with: /\A[a-zA-Z0-9_@.]+\z/ }
+            format: { with: /\A[^@\s]+@[^@\s]+\z/ } if false
+  # validates :username,
+  #           uniqueness: { case_sensitive: false },
+  #           presence: true,
+  #           allow_blank: false,
+  #           format: { with: /\A[a-zA-Z0-9_@.]+\z/ }
 
-  has_many  :access_grants,
-            class_name: 'Doorkeeper::AccessGrant',
-            foreign_key: :resource_owner_id,
-            dependent: :delete_all 
-
-  has_many  :access_tokens,
-            class_name: 'Doorkeeper::AccessToken',
-            foreign_key: :resource_owner_id,
-            dependent: :delete_all
-
-  has_many  :passcodes,
-            class_name: "UserPasscode",
-            dependent: :destroy
-
-  has_one   :profile,
-            class_name: "UserProfile",
-            dependent: :destroy
 
   # Encrypt data
   has_encrypted :email
   blind_index :email
-  before_validation :generate_code, on: :create
+
+  before_save :generate_code
 
   self.ignored_columns = ["email"]
 
@@ -41,6 +32,7 @@ class User < ApplicationRecord
 
   attr_writer :login
 
+  # Login with username
   # def login
   #   @login || self.username || self.email
   # end
@@ -59,13 +51,19 @@ class User < ApplicationRecord
   # end
 
   def generate_code
-    loop do
-      code = SecureRandom.alphanumeric(8).upcase
-      break code unless UserPasscode.exists?(code: code)
+    if code.blank?
+      loop do
+        self.code = SecureRandom.alphanumeric(8).upcase
+        break code unless User.exists?(code: code)
+      end
     end
   end
 
   def will_save_change_to_email?
     false
+  end
+
+  def create_parent
+    pass
   end
 end

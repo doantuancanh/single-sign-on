@@ -5,7 +5,7 @@ class Api::V1::ChildrenController < Api::ApiController
     child = UserCmds::AddChild.call(current_user, params).result
 
     response = Response::JsonResponse.new(
-      Response::Message.new(400, "Invalid Application!"),
+      Response::Message.new(200, "API execute successfully!"),
       Response::UserResponse.new(child).build
     )
 

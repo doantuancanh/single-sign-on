@@ -13,7 +13,7 @@ class Response::UserResponse
   def user_token
     {
       user_id: @user.id,
-      username: @user.username,
+      username: @user.email,
       email: @user.email,
       created_at: @user.created_at.strftime('%H:%M:%S %d/%m/%Y'),
       token: @token&.token,
