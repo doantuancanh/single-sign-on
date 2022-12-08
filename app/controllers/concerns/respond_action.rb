@@ -15,7 +15,7 @@ module RespondAction
     resource.create_access_token(params[:client_id])
     access_token = resource.access_tokens.last
 
-    response = Response::JsonResponse.new(Response::Message.new(200, "API execute sucessfully!"), response_payload)
+    response = Response::JsonResponse.new(Response::Message.new(200, "API execute sucessfully!"), response_payload(resource, access_token))
     render json: response.build, status: 200
   end
 
@@ -27,7 +27,7 @@ module RespondAction
   def response_payload(resource, access_token)
     {
       user_id: resource.id,
-      username: resource.username,
+      username: resource.email,
       email: resource.email,
       created_at: resource.created_at.strftime('%H:%M:%S %d/%m/%Y'),
       access_token: access_token&.token,

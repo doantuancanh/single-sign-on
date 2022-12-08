@@ -9,7 +9,7 @@ module UserCmds
 
     def call
       validate
-      parent.add_child(child_params)
+      User.add_student(@parent, student_params)
     end
 
     private
@@ -18,11 +18,11 @@ module UserCmds
     attr_accessor :params
 
     def validate
-      return if parent.has_role? :parent
+      return unless parent.has_role? :parent
     end
 
-    def child_params
-      params.permit(:name, :age, :gender)
+    def student_params
+      params.permit(:name, :birth_year, :gender, :address, :phone, :fullname, :school)
     end
 
   end

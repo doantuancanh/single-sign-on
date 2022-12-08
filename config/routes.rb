@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users,
+    controllers: {
+      registrations: 'users/registrations',
+      sessions: 'users/sessions',
+      passwords: 'users/passwords'
+    }
 
   namespace :api do
     namespace :v1 do
@@ -19,4 +24,5 @@ Rails.application.routes.draw do
     use_doorkeeper
   end
 
+  root to: 'application#home'
 end
