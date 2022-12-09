@@ -3,21 +3,12 @@
 class Api::V1::Users::RegistrationsController < Devise::RegistrationsController
   protect_from_forgery except: :create
   before_action :configure_sign_up_params, only: [:create]
-  before_action :validate_email, only: [:create]
   before_action :validate_client_application, only: %i[create]
 
   include RespondAction
 
   def create
-    super do
-      resource.email = params[:email]
-      resource.save
-      if params[:role].present?
-        resource.add_role params[:role].to_sym 
-      else
-        resource.add_role :parent
-      end
-    end
+    super
   end
 
   # POST /resource
@@ -55,10 +46,10 @@ class Api::V1::Users::RegistrationsController < Devise::RegistrationsController
     devise_parameter_sanitizer.permit(:sign_up, keys: [:email])
   end
 
-  # def sign_up_params
-  #   params[:user] = params
-  #   params.require(:user).permit(:email, :username, :password, :password_confirmation)
-  # end
+  def sign_up_params
+    params[:user] = params
+    params.require(:user).permit(:email, :password, :password_confirmation)
+  end
 
   # If you have extra params to permit, append them to the sanitizer.
   # def configure_account_update_params
@@ -76,13 +67,6 @@ class Api::V1::Users::RegistrationsController < Devise::RegistrationsController
   # end
   #
   private
-
-  def validate_email
-    if User.exists?(email: params[:email])
-      response = Response::JsonResponse.new(Response::Message.new(400, "Email existed!"), {})
-      render json: response.build, status: 400
-    end
-  end
 
   def validate_client_application
     client = Doorkeeper::Application.where(uid: params[:client_id]).first()

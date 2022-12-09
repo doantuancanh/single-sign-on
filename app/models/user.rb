@@ -4,15 +4,15 @@ class User < ApplicationRecord
   include StudentAction
 
   rolify
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable
-  devise :doorkeeper
 
-  validate  :email,
-            presence: true,
-            uniqueness: { case_sensitive: false },
-            allow_blank: false,
-            format: { with: /\A[^@\s]+@[^@\s]+\z/ } if false
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :doorkeeper
+
+  validates  :email,
+              presence: true,
+              uniqueness: { case_sensitive: false },
+              allow_blank: false,
+              format: { with: /\A[^@\s]+@[^@\s]+\z/ }, unless: :create_student?
   # validates :username,
   #           uniqueness: { case_sensitive: false },
   #           presence: true,
@@ -25,6 +25,7 @@ class User < ApplicationRecord
   blind_index :email
 
   before_save :generate_code
+  after_save :add_default_role
 
   self.ignored_columns = ["email"]
 
@@ -32,23 +33,21 @@ class User < ApplicationRecord
 
   attr_writer :login
 
-  # Login with username
-  # def login
-  #   @login || self.username || self.email
-  # end
+  def create_student?
+    self.email.blank?
+  end
 
-  # def self.find_first_by_auth_conditions(warden_conditions)
-  #   conditions = warden_conditions.dup
-  #   if (login = conditions.delete(:login))
-  #     where(conditions).where(["lower(username) = :value OR lower(email) = :value", { :value => login.downcase }]).first
-  #   else
-  #     if conditions[:username].nil?
-  #       where(conditions).first
-  #     else
-  #       where(username: conditions[:username]).first
-  #     end
-  #   end
-  # end
+  def add_default_role
+    self.add_role :parent
+  end
+
+  def students
+    User.includes(:passcodes, :profile)
+        .where(profile: { parent_id: self.id })
+        .where(passcodes: {type: :default})
+        .all()
+  end
+
 
   def generate_code
     if code.blank?
@@ -63,7 +62,4 @@ class User < ApplicationRecord
     false
   end
 
-  def create_parent
-    pass
-  end
 end

@@ -9,7 +9,7 @@ module UserCmds
 
     def call
       validate
-      User.add_student(@parent, student_params)
+      User.add_student(@parent, student_params) unless failure?
     end
 
     private
@@ -18,7 +18,9 @@ module UserCmds
     attr_accessor :params
 
     def validate
-      return unless parent.has_role? :parent
+      return if parent.has_role? :parent
+
+      errors.add(:role, "User does not have permission!")
     end
 
     def student_params

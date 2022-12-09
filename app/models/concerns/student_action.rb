@@ -15,12 +15,17 @@ module StudentAction
     self.client&.uid
   end
 
+  def parent
+    self.profile.parent
+  end
+
   class_methods do
     def add_student(parent, params)
       student = User.new()
       student.save!
 
       if student.persisted?
+        assign_role(student)
         student.create_profile(parent: parent, params: params)
         student.create_passcode
         student.create_access_token(parent.client_uid)
@@ -35,18 +40,9 @@ module StudentAction
     end
 
     def assign_role(student)
+      student.remove_role :parent
       student.add_role :child
       student.add_role :student
     end
   end
-
-  # def student_username
-  #   index = 1
-  #   loop do
-  #     username = "#{self.username}_student_#{index}"
-  #     break username unless User.exists?(username: username)
-  #     index += 1
-  #   end
-  # end
-
 end
