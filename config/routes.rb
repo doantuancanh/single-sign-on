@@ -16,7 +16,9 @@ Rails.application.routes.draw do
         },
       defaults: { format: :json }
 
-      resource :children, only: %i[list create edit destroy]
+      resources :students, only: %i[index update destroy create]
+
+      get 'student', to: 'students#info'
     end
   end
 

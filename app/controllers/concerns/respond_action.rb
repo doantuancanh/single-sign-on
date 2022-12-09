@@ -29,6 +29,7 @@ module RespondAction
       user_id: resource.id,
       username: resource.email,
       email: resource.email,
+      user_code: resource.code,
       created_at: resource.created_at.strftime('%H:%M:%S %d/%m/%Y'),
       access_token: access_token&.token,
       token_type: 'Bearer',

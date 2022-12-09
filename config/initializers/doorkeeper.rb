@@ -7,6 +7,10 @@ Doorkeeper.configure do
   orm :active_record
 
   # This block will be called to check whether the resource owner is authenticated or not.
+  resource_owner_authenticator do
+    current_user || warden.authenticate!(scope: :user)
+  end
+
   resource_owner_from_credentials do |routes|
     request.params[:user] = {email: request.params[:username], password: request.params[:password]}
     request.env["warden"].logout(:user)
@@ -18,10 +22,6 @@ Doorkeeper.configure do
     else
       request.env["warden"].authenticate!(scope: :user, store: false)
     end
-  end
-
-  resource_owner_authenticator do
-    current_user || warden.authenticate!(scope: :user)
   end
 
   admin_authenticator do |_routes|
