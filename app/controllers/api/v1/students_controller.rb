@@ -20,7 +20,6 @@ class Api::V1::StudentsController < Api::ApiController
   end
 
   def info
-    binding.pry
     cmds = UserCmds::ChildInfo.call(current_user)
 
     if cmds.success?
