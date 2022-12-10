@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require "custom_token_response"
+require "custom_authentication/custom_token_response"
 
 Doorkeeper.configure do
   # Change the ORM that doorkeeper will use (requires ORM extensions installed).

@@ -4,7 +4,7 @@ class PasscodeStrategy < Warden::Strategies::Base
   end
 
   def authenticate!
-    user = User.passcode(passcode)
+    user = UserPasscode.where(code: passcode).where("expired_date > ?", Time.now).first&.user
 
     if user
       success!(user)

@@ -16,7 +16,13 @@ module StudentAction
   end
 
   def parent
+    return unless self.has_role? :student
     self.profile.parent
+  end
+
+  def default_passcode
+    return nil unless self.has_role? :student
+    self.passcodes.where(type: :default).last&.code
   end
 
   class_methods do

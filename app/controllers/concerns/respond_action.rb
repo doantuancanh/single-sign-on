@@ -25,17 +25,18 @@ module RespondAction
   end
 
   def response_payload(resource, access_token)
-    {
-      user_id: resource.id,
-      username: resource.email,
-      email: resource.email,
-      user_code: resource.code,
-      created_at: resource.created_at.strftime('%H:%M:%S %d/%m/%Y'),
-      access_token: access_token&.token,
-      token_type: 'Bearer',
-      expires_in: access_token&.expires_in,
-      refresh_token: access_token&.refresh_token,
-      expired_time: (access_token.created_at + access_token.expires_in.seconds).to_i
-    }
+    Response::UserResponse.new(resource, access_token).build
+    # {
+    #   user_id: resource.id,
+    #   username: resource.email,
+    #   email: resource.email,
+    #   user_code: resource.code,
+    #   created_at: resource.created_at.strftime('%H:%M:%S %d/%m/%Y'),
+    #   access_token: access_token&.token,
+    #   token_type: 'Bearer',
+    #   expires_in: access_token&.expires_in,
+    #   refresh_token: access_token&.refresh_token,
+    #   expired_time: (access_token.created_at + access_token.expires_in.seconds).to_i
+    # }
   end
 end

@@ -43,7 +43,7 @@ class Api::V1::StudentsController < Api::ApiController
     if cmds.success?
       response = Response::JsonResponse.new(
         Response::Message.new(200, "API execute successfully!"),
-        Response::UserResponse.new(cmds.result).build
+        Response::StudentResponse.new(cmds.result).build
       )
 
       render json: response.build, status: :ok
