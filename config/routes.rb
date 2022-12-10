@@ -26,5 +26,5 @@ Rails.application.routes.draw do
     use_doorkeeper
   end
 
-  root to: 'application#home'
+#  root to: 'application#home'
 end

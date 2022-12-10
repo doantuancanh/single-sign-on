@@ -1,20 +1,20 @@
-<h2>Log in</h2>
-
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+<div class="form login">
+  <div class="form__box login">
+    <div class="form__left login">
+      <div class="form__padding login"><img class="form__image login" src="https://i.pinimg.com/originals/8b/44/51/8b4451665d6b2139e29f29b51ffb1829.png"/></div>
+    </div>
+    <div class="form__right login">
+      <div class="form__padding-right login">
+        <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+          <%= render "devise/shared/error_messages", resource: resource %>
+          <h1 class="form__title login">Member Login</h1>
+          <%= f.email_field :email, placeholder: "Email", autocomplete: "Email", class: "form__email login", autofocus: true %>
+          <%= f.password_field :password, placeholder: "***********", autocomplete: "**********", class: "form__password login", autofocus: true %>
+          <%= f.submit "Log in", class: "form__submit-btn login" %>
+        <% end %>
+        <%= render "devise/shared/links" %>
+      </div>
+    </div>
   </div>
+</div>
 
-  <div class="field">
-    <%= f.label :password %><br />
-    <%= f.password_field :password, autocomplete: "current-password" %>
-  </div>
-
-
-  <div class="actions">
-    <%= f.submit "Log in" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
