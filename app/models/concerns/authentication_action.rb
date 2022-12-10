@@ -21,7 +21,7 @@ module AuthenticationAction
       resource_owner_id: self.id,
       refresh_token: generate_refresh_token,
       expires_in: Doorkeeper.configuration.access_token_expires_in.to_i,
-      scopes: ''
+      scopes: 'read'
     )
   end
 
@@ -41,6 +41,21 @@ module AuthenticationAction
     return unless oauth_client?(client_id)
 
     Doorkeeper::AccessToken.revoke_all_for(@client.id, self)
+  end
+
+  def token_json(access_token=nil)
+    token = Doorkeeper::AccessToken.by_token(access_token)
+    token = Doorkeeper::AccessToken.where(resource_owner_id: self.id).last if not token
+
+    return {} if not token
+
+    {
+      token: token&.token,
+      token_type: 'Bearer',
+      expires_in: token&.expires_in,
+      refresh_token: token&.refresh_token,
+      expired_time: (token.created_at + token.expires_in.seconds).to_i
+    }
   end
 
   private

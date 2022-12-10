@@ -32,4 +32,16 @@ module HasProfile
   def update_profile(params)
     self.profile.update(params)
   end
+
+  def profile_json
+    return {} if self.profile.blank?
+
+    {
+      fullname: profile.fullname,
+      school: profile.fullname,
+      gender: profile.gender,
+      address: profile.address,
+      phone: profile.phone
+    }
+  end
 end

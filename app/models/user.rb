@@ -29,7 +29,7 @@ class User < ApplicationRecord
 
   self.ignored_columns = ["email"]
 
-  scope :passcode, ->(passcode) { joins(:passcodes).where(passcodes: {code: passcode}).first }
+  # scope :passcode, ->(passcode) { joins(:passcodes).where(passcodes: {code: passcode}).first }
 
   attr_writer :login
 
@@ -60,6 +60,16 @@ class User < ApplicationRecord
 
   def will_save_change_to_email?
     false
+  end
+
+  def user_json
+    {
+      user_id: self.id,
+      username: self.email,
+      email: self.email,
+      user_code: self.code,
+      created_at: self.created_at.strftime('%H:%M:%S %d/%m/%Y'),
+    }
   end
 
 end
