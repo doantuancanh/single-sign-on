@@ -12,19 +12,19 @@ class UserPasscode < ActiveRecord::Base
 
   before_validation :prepare_params
 
+  def generate_passcode
+    loop do
+      passcode = SecureRandom.alphanumeric(8).upcase
+      break passcode unless UserPasscode.exists?(code: passcode)
+    end
+  end
+
   private
 
   def prepare_params
     self.code = generate_passcode
     assign_type
     set_expired_time
-  end
-
-  def generate_passcode
-    loop do
-      passcode = SecureRandom.alphanumeric(8).upcase
-      break passcode unless UserPasscode.exists?(code: passcode)
-    end
   end
 
   def assign_type

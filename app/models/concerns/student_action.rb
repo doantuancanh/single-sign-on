@@ -17,7 +17,7 @@ module StudentAction
 
   def parent
     return unless self.has_role? :student
-    self.profile.parent
+    self.profile&.parent
   end
 
   def default_passcode

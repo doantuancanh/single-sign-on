@@ -10,6 +10,19 @@ class UserProfile < ActiveRecord::Base
 
   self.ignored_columns = ["phone"]
 
-  # validate :validate_phone, on: :create
+  validates :phone, phone: true, if: :has_phone?
 
+  before_save :set_region
+
+  private
+
+  def has_phone?
+    self.phone.present?
+  end
+
+  def set_region
+    if phone_changed?
+      self.country_code = Phonelib.parse(self.phone).country
+    end
+  end
 end
