@@ -15,7 +15,7 @@ class Api::V1::StudentsController < Api::ApiController
         Response::Message.new(400, "#{cmds.errors}"),
         {}
       )
-      render json: response.build, status: :method_not_allowed
+      render json: response.build, status: :not_acceptable
     end
   end
 
@@ -33,7 +33,7 @@ class Api::V1::StudentsController < Api::ApiController
         Response::Message.new(400, "#{cmds.errors}"),
         {}
       )
-      render json: response.build, status: :method_not_allowed
+      render json: response.build, status: :not_acceptable
     end
   end
 
@@ -52,11 +52,38 @@ class Api::V1::StudentsController < Api::ApiController
         Response::Message.new(400, "#{cmds.errors}"),
         {}
       )
-      render json: response.build, status: :method_not_allowed
+      render json: response.build, status: :not_acceptable
     end
 
   end
 
+  def refresh_passcode
+    cmds = UserCmds::RefreshPasscode.call(current_user, refresh_passcode_params[:student_code])
+
+    if cmds.success?
+      response = Response::JsonResponse.new(
+        Response::Message.new(200, "API execute successfully!"),
+        cmds.result
+      )
+
+      render json: response.build, status: :ok
+    else
+      response = Response::JsonResponse.new(
+        Response::Message.new(400, "#{cmds.errors}"),
+        {}
+      )
+      render json: response.build, status: :not_acceptable
+    end
+  end
+
   private
+
+  def create_student_params
+    params.permit(:school, :fullname, :gender, :birth_year, :address, :phone)
+  end
+
+  def refresh_passcode_params
+    params.permit(:student_code)
+  end
 
 end

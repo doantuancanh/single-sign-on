@@ -8,7 +8,7 @@ module UserCmds
 
     def call
       validate
-      Response::StudentResponse.new(@student) unless failure?
+      Response::StudentResponse.new(@student).build unless failure?
     end
 
     private
