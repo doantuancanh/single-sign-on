@@ -65,7 +65,7 @@ services:
       #build:
       #  context: .
     image: sso
-    command: ["bundle", "exec", "rake db:migrate"]
+    command: ["bundle", "exec", "rails db:migrate"]
       #restart: none
     environment:
       RAILS_ENV: ${RAILS_ENV}

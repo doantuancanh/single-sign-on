@@ -26,6 +26,6 @@ module RespondAction
   end
 
   def response_payload(resource, access_token)
-    Response::UserResponse.new(resource, access_token).build
+    Response::UserWithTokenResponse.new(resource, access_token).build
   end
 end

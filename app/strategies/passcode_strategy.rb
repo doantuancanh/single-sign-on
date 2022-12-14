@@ -1,12 +1,13 @@
 class PasscodeStrategy < Warden::Strategies::Base
   def valid?
-    passcode.present?
+    passcode.present? && (passcode.type == :default || passcode.expired_date >= Time.now)
   end
 
   def authenticate!
-    user = UserPasscode.where(code: passcode).where("expired_date > ?", Time.now).first&.user
+    user = passcode.user
+    parent = user&.parent
 
-    if user
+    if user && parent_confirmed?(parent)
       success!(user)
     else
       fail!('Invalid email or password')
@@ -16,6 +17,14 @@ class PasscodeStrategy < Warden::Strategies::Base
   private
 
   def passcode
-    params['passcode']
+    get_passcode
+  end
+
+  def get_passcode
+    @passcode ||= UserPasscode.where(code: params[:passcode]).first
+  end
+
+  def parent_confirmed?(parent)
+    parent.confirmed? || parent.send(:confirmation_period_valid?)
   end
 end
