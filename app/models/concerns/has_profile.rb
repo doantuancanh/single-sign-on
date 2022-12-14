@@ -10,8 +10,6 @@ module HasProfile
       class_name: "UserProfile",
       dependent: :destroy
 
-    # accepts_nested_attributes_for :profile
-    # accepts_nested_attributes_for :passcodes
   end
 
   def create_profile(parent:, params:)
@@ -22,7 +20,7 @@ module HasProfile
       user: self,
       parent_id: parent.id,
       phone: params[:phone],
-      birth_year: params[:birth_year]
+      birth_year: params[:birth_year],
     }
 
     profile = UserProfile.new(profile_params)
@@ -41,7 +39,8 @@ module HasProfile
       school: profile.fullname,
       gender: profile.gender,
       address: profile.address,
-      phone: profile.phone
+      birth_year: profile.birth_year,
+      birth_day: profile.birth_day&.strftime("%d/%m/%Y")
     }
   end
 end

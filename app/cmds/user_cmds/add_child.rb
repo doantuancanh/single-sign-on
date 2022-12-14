@@ -9,7 +9,8 @@ module UserCmds
 
     def call
       validate
-      User.add_student(@parent, student_params) unless failure?
+      student = User.add_student(@parent, student_params) unless failure?
+      Response::UserResponse.new(student).build.merge(student.token_json) if student
     end
 
     private
@@ -20,7 +21,7 @@ module UserCmds
     def validate
       return if parent.has_role? :parent
 
-      errors.add(:role, "User does not have permission!")
+      errors.add(:code, "PERMISSION_DENIED")
     end
 
     def student_params

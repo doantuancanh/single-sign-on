@@ -8,4 +8,10 @@ class Api::ApiController <  ActionController::API
   def current_client
     doorkeeper_token.application
   end
+
+  private
+  def render_error(message, status = :bad_request)
+    Rails.logger.warn { message }
+    render json: { errors: message }, status: status
+  end
 end

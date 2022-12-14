@@ -10,7 +10,7 @@ class UserProfile < ActiveRecord::Base
 
   self.ignored_columns = ["phone"]
 
-  validates :phone, phone: true, if: :has_phone?
+  # validates :phone, phone: true, if: :has_phone?
 
   before_save :set_region
 
