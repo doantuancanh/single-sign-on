@@ -7,7 +7,7 @@ class Response::UserResponse
   end
 
   def build
-    user.merge(user_profile).merge(user_token)
+    user.merge(user_profile)
   end
 
   def user

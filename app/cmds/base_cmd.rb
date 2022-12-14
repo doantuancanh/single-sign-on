@@ -7,6 +7,12 @@ module BaseCmd
 
   class FinishSignal < StandardError; end
 
+  class Errors < SimpleCommand::Errors
+    def add(key, value, _opts = {})
+      self[key] = value
+    end
+  end
+
   def call
     begin
       super
@@ -43,4 +49,30 @@ module BaseCmd
     end
   end
 
+  def errors
+    @errors ||= Errors.new
+  end
+
+  def status
+    set_status
+  end
+
+  def set_status(status = :bad_request)
+    @status ||= status
+
+    if errors.present?
+      case errors[:code]
+      when StatusConstant::PERMISSION_DENIED # Không có quyền
+        :forbidden
+      when StatusConstant::INVALID_PARAMS # Tham số không hợp lệ
+        :bad_request
+      when StatusConstant::UNAUTHORIZED # Xác thực không thành công
+        :unauthorized
+      when StatusConstant::RESOURCE_NOT_EXIST # Tham số không thỏa mãn điều kiện nghiệp vụ
+        :not_acceptable
+      when StatusConstant::NOT_FOUND # Không tìm thấy đối tượng
+        :not_found
+      end
+    end
+  end
 end

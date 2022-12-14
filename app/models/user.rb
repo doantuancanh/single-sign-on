@@ -6,7 +6,8 @@ class User < ApplicationRecord
   rolify
 
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :doorkeeper
+         :recoverable, :rememberable, :doorkeeper,
+         :confirmable
 
   validates  :email,
               presence: true,
@@ -69,6 +70,8 @@ class User < ApplicationRecord
       email: self.email,
       user_code: self.code,
       created_at: self.created_at.strftime('%H:%M:%S %d/%m/%Y'),
+      confirmed: self.confirmed_at ? true : false,
+      passcode: self.default_passcode
     }
   end
 

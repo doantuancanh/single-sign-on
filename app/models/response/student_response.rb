@@ -7,7 +7,7 @@ class Response::StudentResponse
   end
 
   def build
-    {parent: parent}.merge(student.merge(student_profile).merge(student_passcode).merge(student_token))
+    {parent: parent}.merge(student.merge(student_profile).merge(student_passcode))
   end
 
   def parent
@@ -22,9 +22,9 @@ class Response::StudentResponse
     @student.profile_json
   end
 
-  def student_token
-    @student.token_json(@token)
-  end
+  # def student_token
+  #   @student.token_json(@token)
+  # end
 
   def student_passcode
     { passcode: @student.default_passcode }

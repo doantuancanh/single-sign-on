@@ -5,17 +5,9 @@ class Api::V1::StudentsController < Api::ApiController
     cmds = UserCmds::ListChildren.call(current_user)
 
     if cmds.success?
-      response = Response::JsonResponse.new(
-        Response::Message.new(200, "API execute successfully!"),
-        cmds.result
-      )
-      render json: response.build, status: :ok
+      render json: cmds.result, status: :ok
     else
-      response = Response::JsonResponse.new(
-        Response::Message.new(400, "#{cmds.errors}"),
-        {}
-      )
-      render json: response.build, status: :not_acceptable
+      render_error(cmds.errors, cmds.status)
     end
   end
 
@@ -23,17 +15,9 @@ class Api::V1::StudentsController < Api::ApiController
     cmds = UserCmds::ChildInfo.call(current_user)
 
     if cmds.success?
-      response = Response::JsonResponse.new(
-        Response::Message.new(200, "API execute successfully!"),
-        cmds.result
-      )
-      render json: response.build, status: :ok
+      render json: cmds.result, status: :ok
     else
-      response = Response::JsonResponse.new(
-        Response::Message.new(400, "#{cmds.errors}"),
-        {}
-      )
-      render json: response.build, status: :not_acceptable
+      render_error(cmds.errors, cmds.status)
     end
   end
 
@@ -41,18 +25,9 @@ class Api::V1::StudentsController < Api::ApiController
     cmds = UserCmds::AddChild.call(current_user, params)
 
     if cmds.success?
-      response = Response::JsonResponse.new(
-        Response::Message.new(200, "API execute successfully!"),
-        Response::StudentResponse.new(cmds.result).build
-      )
-
-      render json: response.build, status: :ok
+      render json: cmds.result, status: :ok
     else
-      response = Response::JsonResponse.new(
-        Response::Message.new(400, "#{cmds.errors}"),
-        {}
-      )
-      render json: response.build, status: :not_acceptable
+      render_error(cmds.errors, cmds.status)
     end
 
   end

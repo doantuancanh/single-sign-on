@@ -3,7 +3,6 @@
 class Api::V1::Users::PasswordsController < Devise::PasswordsController
   protect_from_forgery except: :create
   respond_to :json
-  #before_action :forgot_password_params, only: %[create]
 
   # GET /resource/password/new
   # def new
@@ -38,9 +37,8 @@ class Api::V1::Users::PasswordsController < Devise::PasswordsController
 
   private
   
-  def forgot_password_params
-    params[:user] = params[:password]
-    params.require(:user).permit!
+  def resource_params
+    params
   end
 
   #def respond_with(response)

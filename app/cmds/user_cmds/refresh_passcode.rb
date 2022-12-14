@@ -18,16 +18,17 @@ module UserCmds
 
     def validate
       unless parent.has_role? :parent
-        errors.add(:role, "User does not have permission!")
-      end
-
-      unless student.present?
-        errors.add(:student, "Student does not exist!")
+        errors.add(:code, "PERMISSION_DENIED")
       end
 
       unless @parent.students.pluck(:id).include? student.id
-        errors.add(:user, "User does not have permission!")
+        errors.add(:code, "PERMISSION_DENIED")
       end
+
+      unless student.present?
+        errors.add(:code, "RESOURCE_NOT_EXIST")
+      end
+
     end
 
     def refresh_passcode

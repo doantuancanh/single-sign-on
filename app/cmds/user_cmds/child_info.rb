@@ -16,7 +16,7 @@ module UserCmds
 
     def validate
       return if student.has_role? :student
-      errors.add(:role, "User does not have permission!")
+      errors.add(:code, "PERMISSION_DENIED")
     end
   end
 end

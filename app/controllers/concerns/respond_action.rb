@@ -1,7 +1,6 @@
 module RespondAction
   extend ActiveSupport::Concern
   
-
   private
 
   def respond_with(resource, _opts = {})
@@ -12,8 +11,10 @@ module RespondAction
 
   def respond_success
     resource.revoke_all_token(params[:client_id])
-    resource.create_access_token(params[:client_id])
-    access_token = resource.access_tokens.last
+    access_token = resource.create_access_token(params[:client_id])
+    resource.email = 'canhdt@teky.edu.vn'
+    resource.send_confirmation_instructions
+    #access_token = resource.access_tokens.last
 
     response = Response::JsonResponse.new(Response::Message.new(200, "API execute sucessfully!"), response_payload(resource, access_token))
     render json: response.build, status: 200
@@ -26,17 +27,5 @@ module RespondAction
 
   def response_payload(resource, access_token)
     Response::UserResponse.new(resource, access_token).build
-    # {
-    #   user_id: resource.id,
-    #   username: resource.email,
-    #   email: resource.email,
-    #   user_code: resource.code,
-    #   created_at: resource.created_at.strftime('%H:%M:%S %d/%m/%Y'),
-    #   access_token: access_token&.token,
-    #   token_type: 'Bearer',
-    #   expires_in: access_token&.expires_in,
-    #   refresh_token: access_token&.refresh_token,
-    #   expired_time: (access_token.created_at + access_token.expires_in.seconds).to_i
-    # }
   end
 end

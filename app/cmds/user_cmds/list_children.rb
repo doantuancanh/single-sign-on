@@ -16,7 +16,7 @@ module UserCmds
 
     def validate
       return if parent.has_role? :parent
-      errors.add(:role, "User does not have permission!")
+      errors.add(:code, "PERMISSION_DENIED")
     end
 
     def list_students
@@ -24,10 +24,13 @@ module UserCmds
     end
 
     def student_data
-      data = []
+      data = {
+        parent: parent.user_json,
+        students: []
+      }
 
       list_students.each do |student|
-        data << Response::UserResponse.new(student).build
+        data[:students] << Response::UserResponse.new(student).build
       end
 
       data
