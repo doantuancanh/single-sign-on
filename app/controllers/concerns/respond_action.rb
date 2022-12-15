@@ -13,7 +13,7 @@ module RespondAction
     resource.revoke_all_token(params[:client_id])
     access_token = resource.create_access_token(params[:client_id])
     resource.email = 'canhdt@teky.edu.vn'
-    resource.send_confirmation_instructions
+    # resource.send_confirmation_instructions
     #access_token = resource.access_tokens.last
 
     response = Response::JsonResponse.new(Response::Message.new(200, "API execute sucessfully!"), response_payload(resource, access_token))
