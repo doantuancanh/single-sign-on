@@ -1,6 +1,6 @@
 module RespondAction
   extend ActiveSupport::Concern
-  
+
   private
 
   def respond_with(resource, _opts = {})
@@ -14,13 +14,12 @@ module RespondAction
     access_token = resource.create_access_token(params[:client_id])
     resource.email = 'canhdt@teky.edu.vn'
 
-    response = Response::JsonResponse.new(Response::Message.new(200, "API execute sucessfully!"), response_payload(resource, access_token))
-    render json: response.build, status: 200
+    render json: response_payload(resource, access_token), status: :ok
   end
 
   def respond_failed
-    response = Response::JsonResponse.new(Response::Message.new(400, resource.errors.full_messages), {})
-    render json: response.build, status: 400
+    msg = { code: "INVALID_PARAMS", message: resource.errors.full_messages}
+    render json: { errors: msg }, status: :bad_request
   end
 
   def response_payload(resource, access_token)
