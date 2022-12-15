@@ -88,7 +88,7 @@ Rails.application.configure do
     :authentication => 'plain',
     :user_name => ENV['EMAIL_HOST_USER'],
     :password => ENV['EMAIL_HOST_PASSWORD'],
-    :enable_starttls_auto => ENV['EMAIL_TLS']
+    :enable_starttls_auto => ENV['EMAIL_USE_TLS']
   }
 
   config.action_mailer.default_url_options = { :host => ENV['HOST'] }

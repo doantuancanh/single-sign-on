@@ -25,7 +25,7 @@ services:
     depends_on:
       - postgres
       - redis
-        #  - sidekiq
+      - sidekiq
     ports:
       - 3000:3000
     env_file: .env
