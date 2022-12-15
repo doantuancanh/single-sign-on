@@ -83,12 +83,12 @@ Rails.application.configure do
 
   config.action_mailer.smtp_settings = {
     :address => ENV['EMAIL_HOST'],
-    :port => 587,
-    :domain => 'teky.edu.vn',
+    :port => ENV['EMAIL_PORT'],
+    :domain => ENV['EMAIL_DOMAIN'],
     :authentication => 'plain',
     :user_name => ENV['EMAIL_HOST_USER'],
     :password => ENV['EMAIL_HOST_PASSWORD'],
-    :enable_starttls_auto => true
+    :enable_starttls_auto => ENV['EMAIL_TLS']
   }
 
   config.action_mailer.default_url_options = { :host => ENV['HOST'] }
