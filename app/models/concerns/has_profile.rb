@@ -32,7 +32,7 @@ module HasProfile
 
     profile = UserProfile.new(user: self).save! unless profile.present?
 
-    self.profile.update(params)
+    profile.update(params)
   end
 
   def profile_json
