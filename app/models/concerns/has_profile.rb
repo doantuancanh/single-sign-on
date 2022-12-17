@@ -12,13 +12,13 @@ module HasProfile
 
   end
 
-  def create_profile(parent:, params:)
+  def create_profile(parent: nil, params: {})
     profile_params = {
       fullname: params[:fullname],
       school: params[:school],
       gender: params[:gender] || 'male',
       user: self,
-      parent_id: parent.id,
+      parent_id: parent&.id,
       phone: params[:phone],
       birth_year: params[:birth_year],
     }
@@ -28,6 +28,10 @@ module HasProfile
   end
 
   def update_profile(params)
+    profile = self.profile
+
+    profile = UserProfile.new(user: self).save! unless profile.present?
+
     self.profile.update(params)
   end
 
@@ -36,7 +40,7 @@ module HasProfile
 
     {
       fullname: profile.fullname,
-      school: profile.fullname,
+      school: profile.school,
       gender: profile.gender,
       address: profile.address,
       birth_year: profile.birth_year,

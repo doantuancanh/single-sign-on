@@ -2,26 +2,14 @@ class Api::V1::ProfilesController < Api::ApiController
   respond_to :json
 
   def update
-    cmds = UserCmds::ListChildren.call(current_user)
+    cmds = ProfileCmds::UpdateProfile.call(current_user, profile_params)
 
-    if cmds.success?
-      response = Response::JsonResponse.new(
-        Response::Message.new(200, "API execute successfully!"),
-        cmds.result
-      )
-      render json: response.build, status: :ok
-    else
-      response = Response::JsonResponse.new(
-        Response::Message.new(400, "#{cmds.errors}"),
-        {}
-      )
-      render json: response.build, status: :not_acceptable
-    end
+    respond_with(cmds)
   end
 
   private
 
   def profile_params
-    params.permit(:school, :fullname, :gender, :birth_year, :address, :phone)
+    params.permit(:school, :fullname, :gender, :birth_year, :address)
   end
 end

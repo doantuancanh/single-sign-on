@@ -1,8 +1,10 @@
 class UserProfile < ActiveRecord::Base
+  acts_as_paranoid
+
   enum gender: { male: 'male', female: 'female', other: 'other' }
 
-  belongs_to :user
-  belongs_to :parent, class_name: 'User', foreign_key: 'parent_id'
+  belongs_to :user, dependent: :destroy
+  belongs_to :parent, class_name: 'User', foreign_key: 'parent_id', optional: true
 
   # Encrypt data
   has_encrypted :phone

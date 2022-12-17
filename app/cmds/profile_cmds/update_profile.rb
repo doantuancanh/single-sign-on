@@ -1,5 +1,5 @@
-module UserCmds
-  class AddChild
+module ProfileCmds
+  class UpdateProfile
     prepend BaseCmd
 
     def initialize(user, profile_params)
@@ -9,22 +9,15 @@ module UserCmds
 
     def call
       validate
-      profile.update!(profile_params) unless failure?
+      user.update_profile(profile_params) unless failure?
       Response::UserResponse.new(user).build
     end
 
     private
-    attr_reader: :user, :profile_params
+    attr_reader :user, :profile_params
 
     def validate
-    end
-
-    def profile
-      @profile ||= get_profile
-    end
-
-    def get_profile
-      user.profile
+      true
     end
   end
 end

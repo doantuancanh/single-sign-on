@@ -17,10 +17,17 @@ Rails.application.routes.draw do
       defaults: { format: :json }
 
       resources :students, only: %i[index update destroy create]
-      resources :profiles, only: %i[update]
+      #resources :profiles, only: %i[update]
 
       get 'student', to: 'students#info'
-      post 'refresh_passcode', to: 'students#refresh_passcode'
+
+      scope :students do
+        post ':id/refresh_passcode', to: 'students#refresh_passcode'
+      end
+
+      scope :users do
+        post ':code/update_profile', to: 'profiles#update'
+      end
     end
   end
 

@@ -2,9 +2,9 @@ module UserCmds
   class RefreshPasscode
     prepend BaseCmd
 
-    def initialize(parent, student_code)
+    def initialize(parent, student)
       @parent = parent
-      @student_code = student_code
+      @student = student
     end
 
     def call
@@ -14,7 +14,7 @@ module UserCmds
     end
 
     private
-    attr_reader :parent, :student_code
+    attr_reader :parent, :student
 
     def validate
       unless parent.has_role? :parent
@@ -35,14 +35,6 @@ module UserCmds
       passcode = UserPasscode.where(user_id: student.id, type: :default).first
       passcode.code = passcode.generate_passcode
       passcode.save!
-    end
-
-    def student
-      @student ||= get_student
-    end
-
-    def get_student
-      User.where(code: student_code).first()
     end
   end
 end

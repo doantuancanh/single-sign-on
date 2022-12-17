@@ -4,6 +4,7 @@ class User < ApplicationRecord
   include StudentAction
 
   rolify
+  acts_as_paranoid
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :doorkeeper,
@@ -20,7 +21,6 @@ class User < ApplicationRecord
   #           allow_blank: false,
   #           format: { with: /\A[a-zA-Z0-9_@.]+\z/ }
 
-
   # Encrypt data
   has_encrypted :email
   blind_index :email
@@ -30,7 +30,7 @@ class User < ApplicationRecord
 
   self.ignored_columns = ["email"]
 
-  # scope :passcode, ->(passcode) { joins(:passcodes).where(passcodes: {code: passcode}).first }
+  scope :find_by_passcode, ->(passcode) { joins(:passcodes).where(passcodes: {code: passcode}).first }
 
   attr_writer :login
 

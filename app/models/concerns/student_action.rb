@@ -25,6 +25,10 @@ module StudentAction
     self.passcodes.where(type: :default).last&.code
   end
 
+  def student_ids
+    UserProfile.where(parent_id: self.id).pluck(:user_id).uniq.compact
+  end
+
   class_methods do
     def add_student(parent, params)
       student = User.new()

@@ -1,57 +1,42 @@
 class Api::V1::StudentsController < Api::ApiController
+  before_action :find_student, only: %i[refresh_passcode destroy]
   respond_to :json
 
   def index
     cmds = UserCmds::ListChildren.call(current_user)
 
-    if cmds.success?
-      render json: cmds.result, status: :ok
-    else
-      render_error(cmds.errors, cmds.status)
-    end
+    respond_with(cmds)
   end
 
   def info
     cmds = UserCmds::ChildInfo.call(current_user)
 
-    if cmds.success?
-      render json: cmds.result, status: :ok
-    else
-      render_error(cmds.errors, cmds.status)
-    end
+    respond_with(cmds)
   end
 
   def create
     cmds = UserCmds::AddChild.call(current_user, params)
 
-    if cmds.success?
-      render json: cmds.result, status: :ok
-    else
-      render_error(cmds.errors, cmds.status)
-    end
-
+    respond_with(cmds)
   end
 
   def refresh_passcode
-    cmds = UserCmds::RefreshPasscode.call(current_user, refresh_passcode_params[:student_code])
+    cmds = UserCmds::RefreshPasscode.call(current_user, @student)
 
-    if cmds.success?
-      response = Response::JsonResponse.new(
-        Response::Message.new(200, "API execute successfully!"),
-        cmds.result
-      )
+    respond_with(cmds)
+  end
+  
+  def destroy
+    cmds = UserCmds::DeleteStudent.call(current_user, @student)
 
-      render json: response.build, status: :ok
-    else
-      response = Response::JsonResponse.new(
-        Response::Message.new(400, "#{cmds.errors}"),
-        {}
-      )
-      render json: response.build, status: :not_acceptable
-    end
+    respond_with(cmds)
   end
 
   private
+
+  def find_student
+    @student = User.find_by_code(params[:id])
+  end
 
   def create_student_params
     params.permit(:school, :fullname, :gender, :birth_year, :address, :phone)
@@ -60,5 +45,4 @@ class Api::V1::StudentsController < Api::ApiController
   def refresh_passcode_params
     params.permit(:student_code)
   end
-
 end

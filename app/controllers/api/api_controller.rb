@@ -14,4 +14,12 @@ class Api::ApiController <  ActionController::API
     Rails.logger.warn { message }
     render json: { errors: message }, status: status
   end
+
+  def respond_with(cmds, _opts = {})
+    if cmds.success?
+      render json: cmds.result, status: :ok
+    else
+      render_error(cmds.errors, cmds.status)
+    end
+  end
 end
