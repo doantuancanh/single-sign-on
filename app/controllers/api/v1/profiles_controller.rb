@@ -10,6 +10,6 @@ class Api::V1::ProfilesController < Api::ApiController
   private
 
   def profile_params
-    params.permit(:school, :fullname, :gender, :birth_year, :address)
+    params.permit(:school, :fullname, :gender, :birth_year, :address, :birth_day)
   end
 end

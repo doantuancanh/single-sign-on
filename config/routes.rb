@@ -26,7 +26,7 @@ Rails.application.routes.draw do
       end
 
       scope :users do
-        post ':code/update_profile', to: 'profiles#update'
+        post 'update_profile', to: 'profiles#update'
       end
     end
   end
