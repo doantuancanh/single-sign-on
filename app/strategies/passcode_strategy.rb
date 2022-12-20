@@ -1,6 +1,6 @@
 class PasscodeStrategy < Warden::Strategies::Base
   def valid?
-    passcode.present? && (passcode.type == :default || passcode.expired_date >= Time.now)
+    passcode.present? && (passcode.type == "default" || passcode.expired_date >= Time.now)
   end
 
   def authenticate!
