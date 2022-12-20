@@ -12,7 +12,6 @@ module RespondAction
   def respond_success
     resource.revoke_all_token(params[:client_id])
     access_token = resource.create_access_token(params[:client_id])
-    resource.email = 'canhdt@teky.edu.vn'
 
     render json: response_payload(resource, access_token), status: :ok
   end

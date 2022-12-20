@@ -28,7 +28,6 @@ class Api::V1::Users::RegistrationsController < Devise::RegistrationsController
     client = Doorkeeper::Application.where(uid: params[:client_id]).first()
 
     if client.blank?
-      # response = Response::JsonResponse.new(Response::Message.new(400, "Invalid Application!"), {})
       msg = { code: "INVALID_PARAMS" }
       render json: { errors: msg }, status: :bad_request
     end
