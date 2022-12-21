@@ -38,7 +38,8 @@ services:
     <<: *base
     image: sso
     volumes:
-      - .:/app
+      - .:/app:delegated
+      - bundle:/usr/local/bundle
     depends_on:
       - postgres
       - redis
@@ -74,6 +75,9 @@ services:
       DATABASE_NAME: ${DATABASE_NAME}    
       POSTGRES_USER: ${DATABASE_USER}    
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    volumes:
+      - .:/app:delegated
+      - bundle:/usr/local/bundle
     depends_on:
       - postgres
 
