@@ -63,11 +63,8 @@ services:
 
   sso_migration:
     <<: *base
-      #build:
-      #  context: .
     image: sso
     command: ["bundle", "exec", "rails db:migrate"]
-      #restart: none
     environment:
       RAILS_ENV: ${RAILS_ENV}
       POSTGRES_HOST: ${DATABASE_HOST}    
