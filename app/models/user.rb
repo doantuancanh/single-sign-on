@@ -45,7 +45,7 @@ class User < ApplicationRecord
   def students
     User.includes(:passcodes, :profile)
         .where(profile: { parent_id: self.id })
-        .where(passcodes: {type: :default})
+        .where(passcodes: {type: UserPasscode::DEFAULT_TYPE})
         .all()
   end
 

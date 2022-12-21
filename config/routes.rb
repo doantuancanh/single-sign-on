@@ -23,6 +23,7 @@ Rails.application.routes.draw do
 
       scope :students do
         post ':id/refresh_passcode', to: 'students#refresh_passcode'
+        post ':id/short_passcode', to: 'students#create_short_passcode'
       end
 
       scope :users do

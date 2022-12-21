@@ -12,6 +12,9 @@ class UserPasscode < ActiveRecord::Base
 
   before_validation :prepare_params
 
+  DEFAULT_TYPE = "default"
+  SHORT_TYPE = "short"
+
   def generate_passcode
     loop do
       passcode = SecureRandom.alphanumeric(8).upcase
@@ -29,13 +32,15 @@ class UserPasscode < ActiveRecord::Base
 
   def assign_type
     if self.type.blank?
-      self.type = :default
+      self.type = DEFAULT_TYPE
     end
 
   end
 
   def set_expired_time
-    live_time = ENV["passcode_live_time"] || 60 * 60 * 24
-    self.expired_date = Time.now + live_time.to_i.seconds
+    if self.type == SHORT_TYPE
+      live_time = ENV["passcode_live_time"] || 60 * 60 * 24
+      self.expired_date = Time.now + live_time.to_i.seconds
+    end
   end
 end

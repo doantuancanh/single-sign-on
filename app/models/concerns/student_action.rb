@@ -3,8 +3,13 @@ module StudentAction
 
   def create_passcode
     if self.has_role? :student or self.has_role? :child
-      UserPasscode.create!(user_id: self.id)
+      UserPasscode.find_or_create_by!(user_id: self.id)
     end
+  end
+
+  def create_short_passcode
+    return unless self.has_role? :student
+    UserPasscode.create!(user_id: self.id, type: :short)
   end
 
   def auto_password
@@ -22,7 +27,7 @@ module StudentAction
 
   def default_passcode
     return nil unless self.has_role? :student
-    self.passcodes.where(type: :default).last&.code
+    self.passcodes.where(type: UserPasscode::DEFAULT_TYPE).last&.code
   end
 
   def student_ids

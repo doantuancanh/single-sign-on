@@ -1,5 +1,5 @@
 class Api::V1::StudentsController < Api::ApiController
-  before_action :find_student, only: %i[refresh_passcode destroy]
+  before_action :find_student, only: %i[refresh_passcode destroy create_short_passcode]
   respond_to :json
 
   def index
@@ -28,6 +28,12 @@ class Api::V1::StudentsController < Api::ApiController
   
   def destroy
     cmds = UserCmds::DeleteStudent.call(current_user, @student)
+
+    respond_with(cmds)
+  end
+
+  def create_short_passcode
+    cmds = UserCmds::CreateShortTermPasscode.call(current_user, @student)
 
     respond_with(cmds)
   end
