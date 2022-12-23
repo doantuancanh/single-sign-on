@@ -1,10 +1,10 @@
 class Response::StudentResponse
   attr_accessor :student
 
-  def initialize(student, token=nil, passcode=Passcode.new)
+  def initialize(student, token=nil, passcode=nil)
     @student = student
     @token = token || Doorkeeper::AccessToken.where(resource_owner_id: student.id).last
-    @passcode = passcode.code || @student.default_passcode
+    @passcode = passcode || @student.default_passcode
   end
 
   def build

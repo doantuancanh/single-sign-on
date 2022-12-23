@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_17_020720) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_21_085909) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -94,6 +94,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_17_020720) do
     t.string "phone_bidx"
     t.datetime "birth_day"
     t.datetime "deleted_at"
+    t.string "level"
     t.index ["deleted_at"], name: "index_user_profiles_on_deleted_at"
     t.index ["parent_id"], name: "index_user_profiles_on_parent_id"
     t.index ["phone_bidx"], name: "index_user_profiles_on_phone_bidx"

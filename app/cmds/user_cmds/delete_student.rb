@@ -21,7 +21,7 @@ module UserCmds
       end
 
       unless parent.student_ids.include? student.id
-        errors.add(:code, "PERMISSION_DENIED")
+        errors.add(:code, "NOT_FOUND")
       end
     end
 
