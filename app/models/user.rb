@@ -71,7 +71,8 @@ class User < ApplicationRecord
       user_code: self.code,
       created_at: self.created_at.strftime('%H:%M:%S %d/%m/%Y'),
       confirmed: self.confirmed_at ? true : false,
-      passcode: self.default_passcode
+      passcode: self.default_passcode&.code,
+      role: self.roles.pluck(:name)
     }
   end
 

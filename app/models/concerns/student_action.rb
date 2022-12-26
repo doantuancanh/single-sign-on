@@ -27,7 +27,7 @@ module StudentAction
 
   def default_passcode
     return nil unless self.has_role? :student
-    self.passcodes.where(type: UserPasscode::DEFAULT_TYPE).last&.code
+    self.passcodes.where(type: UserPasscode::DEFAULT_TYPE).last
   end
 
   def student_ids

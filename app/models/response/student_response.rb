@@ -24,6 +24,10 @@ class Response::StudentResponse
   end
 
   def student_passcode
-    { passcode: @passcode }
+    return {} if @passcode.blank?
+    { 
+      passcode: @passcode.code,
+      passcode_expired_at: @passcode.expired_date.to_i
+    }
   end
 end
