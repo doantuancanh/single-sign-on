@@ -10,6 +10,7 @@ RUN apk add --no-cache \
     postgresql-dev \
     postgresql-client \
     git \
+    yarn \
   && mkdir -p /var/app \
   && gem install bundler
 
@@ -21,6 +22,9 @@ RUN apk add --no-cache musl ruby-full ruby-dev gcc make musl-dev openssl openssl
 RUN bundle config set --local force_ruby_platform true
 
 RUN bundle install
+
+COPY package.json ./
+RUN yarn install
 
 COPY . /app
 
@@ -41,6 +45,7 @@ RUN apk add --no-cache \
     postgresql-client \
     imagemagick \
     git \
+    yarn \
   && gem install bundler
 
 COPY --from=pre-builder /gems/ /gems/

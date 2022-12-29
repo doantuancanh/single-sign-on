@@ -105,3 +105,7 @@ gem 'sass-rails', '~> 6.0'
 
 # Highlight code
 # gem 'coderay', '~> 1.1', '>= 1.1.3'
+
+gem "jsbundling-rails", "~> 1.1"
+
+gem "cssbundling-rails", "~> 1.1"

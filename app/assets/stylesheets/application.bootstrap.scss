@@ -13,5 +13,8 @@
  *= require_tree .
  *= require_self
  */
+@import 'bootstrap/scss/bootstrap';
+@import 'bootstrap-icons/font/bootstrap-icons';
+
 @import "devise/login.scss";
 @import "devise/sign_up.scss";

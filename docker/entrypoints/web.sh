@@ -13,5 +13,7 @@ do
 done
 
 bundle install
+yarn install
+bundle exec rake assets:precompile
 
 exec "$@"

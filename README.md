@@ -7,3 +7,14 @@
 ## Môi trường development
 - Start docker containers: `docker-compose -f docker-compose-dev.yml up -d`
 - Stop containers: `docker-compose -f docker-compose-dev.yml down` 
+
+## Thêm thư viện javascript
+- Thêm package vào `dependencies` trong file `pacakge.json`
+- Run `yarn install`
+- Import các package vào `application.js` và css file (nếu cần) vào `application.bootstrap.scss`
+
+## Naming convention
+### Branch name
++ For a feature: feature/<feature_name>
++ For frontend: fe/<component>
++ For fixing bug: bug/fix_something
