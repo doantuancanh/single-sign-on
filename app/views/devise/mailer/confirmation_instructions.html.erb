@@ -1,5 +1,10 @@
-<p>Welcome <%= @email %>!</p>
+<p>Xin chào <%= @email %>!</p>
 
-<p>You can confirm your account email through the link below:</p>
+<p>Cảm ơn bạn đã đăng ký sử dụng sản phẩm của Teky!</p>
 
+<p>Để đảm bảo rằng bạn là chủ sở hữu của địa chỉ mail <%= @email %>, vui lòng nhấp vào liên kết bên dưới để kết thúc đăng ký của bạn:</p>
 <p><%= link_to 'Confirm my account', confirmation_url(@resource, confirmation_token: @token) %></p>
+
+<p>Nếu bạn chưa đăng ký trên trang web của chúng tôi? Có thể ai đó đã nhập địa chỉ email của họ không chính xác.</p>
+<p>Bạn có thể bỏ qua email này</p>
+

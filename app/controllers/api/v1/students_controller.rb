@@ -45,7 +45,7 @@ class Api::V1::StudentsController < Api::ApiController
   end
 
   def create_student_params
-    params.permit(:school, :fullname, :gender, :birth_year, :address, :phone)
+    params.permit(:school, :fullname, :gender, :birth_year, :address, :birth_day)
   end
 
   def refresh_passcode_params

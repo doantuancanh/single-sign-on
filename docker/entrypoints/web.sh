@@ -12,6 +12,7 @@ do
   sleep 2;
 done
 
+BUNDLE_PATH='/gems'
 bundle install
 yarn install
 bundle exec rake assets:precompile

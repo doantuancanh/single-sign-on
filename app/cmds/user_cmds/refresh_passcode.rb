@@ -17,16 +17,16 @@ module UserCmds
     attr_reader :parent, :student
 
     def validate
+      unless student.present?
+        errors.add(:code, "NOT_FOUND")
+      end
+
       unless parent.has_role? :parent
         errors.add(:code, "PERMISSION_DENIED")
       end
 
       unless @parent.students.pluck(:id).include? student.id
         errors.add(:code, "PERMISSION_DENIED")
-      end
-
-      unless student.present?
-        errors.add(:code, "RESOURCE_NOT_EXIST")
       end
 
     end

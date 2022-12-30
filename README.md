@@ -11,7 +11,13 @@
 ## Thêm thư viện javascript
 - Thêm package vào `dependencies` trong file `pacakge.json`
 - Run `yarn install`
+#### hoặc
+- Run `yarn add { package_name }`
+
 - Import các package vào `application.js` và css file (nếu cần) vào `application.bootstrap.scss`
+
+## Thêm file css
+- Import vào file `application.bootstrap.scss`
 
 ## Naming convention
 ### Branch name

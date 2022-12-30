@@ -21,6 +21,8 @@ module HasProfile
       parent_id: parent&.id,
       phone: params[:phone],
       birth_year: params[:birth_year],
+      address: params[:address],
+      birth_day: params[:birth_day]
     }
 
     profile = UserProfile.new(profile_params)

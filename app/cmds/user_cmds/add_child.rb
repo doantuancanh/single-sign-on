@@ -25,7 +25,7 @@ module UserCmds
     end
 
     def student_params
-      params.permit(:name, :birth_year, :gender, :address, :phone, :fullname, :school)
+      params.permit(:name, :birth_year, :gender, :address, :phone, :fullname, :school, :birth_day)
     end
 
   end
